@@ -79,9 +79,6 @@ const todoReducer = (state: TaskType[], action: TodoAction): TaskType[] => {
 const getTaskById = (state: TaskType[], id: string): TaskType | undefined =>
   state.find((task) => task.id === id);
 
-const getTaskByStatus = (state: TaskType[], status: TaskStatus): TaskType[] =>
-  state.filter((task) => task.status === status);
-
 export const useTodo = () => {
   const [state, dispatch] = useReducer(todoReducer, todoInitialState);
 
@@ -90,10 +87,13 @@ export const useTodo = () => {
     [state],
   );
 
-  const findTaskByStatus = useCallback(
-    (status: TaskStatus) => getTaskByStatus(state, status),
-    [state],
-  );
+  const categorizedTasks: Record<TaskStatus, TaskType[]> = {
+    NEW: state.filter((task) => task.status === "NEW"),
+    INPROCESS: state.filter((task) => task.status === "INPROCESS"),
+    DONE: state.filter((task) => task.status === "DONE"),
+    BACKLOG: state.filter((task) => task.status === "BACKLOG"),
+    ARCHIVED: state.filter((task) => task.status === "ARCHIVED"),
+  };
 
-  return { state, dispatch, findTaskById, findTaskByStatus };
+  return { state, dispatch, findTaskById, categorizedTasks };
 };

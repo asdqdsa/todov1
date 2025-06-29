@@ -1,5 +1,21 @@
-import type { TaskType, TodoType } from "./todoTypes";
+import type { TaskStatus, TaskType, TodoType } from "./todoTypes";
 import { v4 as uuid } from "uuid";
+
+export const TASK_STATUSES = [
+  "INPROCESS",
+  "DONE",
+  "NEW",
+  "BACKLOG",
+  "ARCHIVED",
+] as const;
+
+export const STATUS_LABELS: Record<TaskStatus, string> = {
+  INPROCESS: "In Process",
+  DONE: "Done",
+  NEW: "New",
+  BACKLOG: "Backlog",
+  ARCHIVED: "Archived",
+};
 
 export const dummyTask: TaskType = {
   id: "",

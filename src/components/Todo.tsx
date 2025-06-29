@@ -1,11 +1,11 @@
 import { useState } from "react";
-import { Task } from "./Task";
 import { useTodoCtx } from "../hooks/useTodoCtx";
 import { TaskInfo } from "./TaskInfo";
 import { TaskCategory } from "./TaskCategory";
+import { STATUS_LABELS } from "../types/constants";
 
 export function Todo() {
-  const { state, dispatch, findTaskById, findTaskByStatus } = useTodoCtx();
+  const { dispatch, findTaskById, categorizedTasks } = useTodoCtx();
   const [input, setInput] = useState<string>("");
   const [selectedTaskId, setSelectTaskId] = useState<string | undefined>(
     undefined,
@@ -27,12 +27,6 @@ export function Todo() {
     ? findTaskById(selectedTaskId)
     : undefined;
 
-  const newTasks = findTaskByStatus("NEW");
-  const currentTasks = findTaskByStatus("INPROCESS");
-  const doneTasks = findTaskByStatus("DONE");
-  const postponedTasks = findTaskByStatus("BACKLOG");
-  const deletedTasks = findTaskByStatus("ARCHIVED");
-
   return (
     <div className="grid grid-cols-2 gap-4 grid-flow-col">
       <div className="flex flex-col gap-4">
@@ -46,30 +40,40 @@ export function Todo() {
           />
         </div>
 
-        <TaskCategory title="NEW" tasks={newTasks} onSelect={setSelectTaskId} />
+        <TaskCategory
+          title="NEW"
+          tasks={categorizedTasks.NEW}
+          onSelect={setSelectTaskId}
+        />
         <TaskCategory
           title="DONE"
-          tasks={doneTasks}
+          tasks={categorizedTasks.DONE}
           onSelect={setSelectTaskId}
         />
         <TaskCategory
           title="CURRENT"
-          tasks={currentTasks}
+          tasks={categorizedTasks.INPROCESS}
           onSelect={setSelectTaskId}
         />
         <TaskCategory
           title="BACKLOG"
-          tasks={postponedTasks}
+          tasks={categorizedTasks.BACKLOG}
           onSelect={setSelectTaskId}
         />
         <TaskCategory
           title="ARCHIVED"
-          tasks={deletedTasks}
+          tasks={categorizedTasks.ARCHIVED}
           onSelect={setSelectTaskId}
         />
       </div>
       {/* <pre>{JSON.stringify(findTaskById(selectTaskId || ""), null, 2)}</pre> */}
-      {selectedTask && <TaskInfo {...selectedTask} />}
+      {selectedTask && (
+        <TaskInfo
+          {...selectedTask}
+          labels={STATUS_LABELS}
+          dispatch={dispatch}
+        />
+      )}
     </div>
   );
 }

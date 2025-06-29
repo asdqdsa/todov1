@@ -9,10 +9,8 @@ interface ITodoContext {
   }[];
   dispatch: React.Dispatch<TodoAction>;
   findTaskById: (id: string) => TaskType | undefined;
-  findTaskByStatus: (status: TaskStatus) => TaskType[];
+  categorizedTasks: Record<TaskStatus, TaskType[]>;
 }
-
-// const getTaskById = (state: TaskType[], id: string): TaskType | undefined =>
 
 export const TodoContext = createContext<ITodoContext | undefined>(undefined);
 

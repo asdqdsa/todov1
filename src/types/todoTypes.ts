@@ -1,4 +1,8 @@
-export type TaskStatus = "INPROCESS" | "DONE" | "NEW" | "BACKLOG" | "ARCHIVED";
+import type { STATUS_LABELS, TASK_STATUSES } from "./constants";
+
+export type StatusLabelsMap = typeof STATUS_LABELS;
+export type TaskStatus = (typeof TASK_STATUSES)[number];
+
 export type TaskType = {
   id: string;
   title: string;
