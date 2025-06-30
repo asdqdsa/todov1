@@ -1,12 +1,12 @@
 import { useCallback, useReducer } from "react";
 import { v4 as uuid } from "uuid";
-import type {
-  TaskStatus,
-  TaskType,
+import {
   TODO_ACTIONS,
-  TodoAction,
-} from "../types/todoTypes";
-import { todoInitialState } from "../types/constants";
+  type TaskStatus,
+  type TaskType,
+  type TodoAction,
+} from "../types&constants/todoTypes";
+import { todoInitialState } from "../types&constants/constants";
 
 const handleAddTask = (
   state: TaskType[],
@@ -59,16 +59,16 @@ const handleUpdateStatusTask = (
 
 const todoReducer = (state: TaskType[], action: TodoAction): TaskType[] => {
   switch (action.type) {
-    case "ADD_TASK":
+    case TODO_ACTIONS.ADD_TASK:
       return handleAddTask(state, action);
 
-    case "REMOVE_TASK":
+    case TODO_ACTIONS.REMOVE_TASK:
       return handleRemoveTask(state, action);
 
-    case "UPDATE_TASK":
+    case TODO_ACTIONS.UPDATE_TASK:
       return handleUpdateTask(state, action);
 
-    case "UPDATE_STATUS_TASK":
+    case TODO_ACTIONS.UPDATE_STATUS_TASK:
       return handleUpdateStatusTask(state, action);
 
     default:

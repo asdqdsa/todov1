@@ -1,4 +1,4 @@
-import type { TaskType } from "../types/todoTypes";
+import type { TaskType } from "../types&constants/todoTypes";
 import { Task } from "./Task";
 
 export function TaskCategory({

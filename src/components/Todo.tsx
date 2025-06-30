@@ -2,7 +2,6 @@ import { useState } from "react";
 import { useTodoCtx } from "../hooks/useTodoCtx";
 import { TaskInfo } from "./TaskInfo";
 import { TaskCategory } from "./TaskCategory";
-import { STATUS_LABELS } from "../types/constants";
 
 export function Todo() {
   const { dispatch, findTaskById, categorizedTasks } = useTodoCtx();
@@ -28,10 +27,12 @@ export function Todo() {
     : undefined;
 
   return (
-    <div className="grid grid-cols-2 gap-4 grid-flow-col">
+    <div className="grid grid-cols-2 gap-4 grid-flow-col p-4">
       <div className="flex flex-col gap-4">
         <div className="flex">
           <input
+            className=" border-amber-50 px-2 py-1 w-full bg-gray-950
+                                focus:outline-none focus:border-transparent"
             type="text"
             placeholder="Add a Task"
             onChange={handleInputChange}
@@ -67,13 +68,7 @@ export function Todo() {
         />
       </div>
       {/* <pre>{JSON.stringify(findTaskById(selectTaskId || ""), null, 2)}</pre> */}
-      {selectedTask && (
-        <TaskInfo
-          {...selectedTask}
-          labels={STATUS_LABELS}
-          dispatch={dispatch}
-        />
-      )}
+      {selectedTask && <TaskInfo {...selectedTask} dispatch={dispatch} />}
     </div>
   );
 }

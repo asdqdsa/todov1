@@ -1,59 +1,99 @@
 import { useEffect, useState } from "react";
 import type {
-  StatusLabelsMap,
   TaskStatus,
   TaskType,
   TodoAction,
-} from "../types/todoTypes";
+} from "../types&constants/todoTypes";
+import { STATUS_LABELS, STATUS_TRANSITION } from "../types&constants/constants";
+import { ConfirmModal } from "./ConfrimModal";
 
 export function TaskInfo({
   description,
   status,
   title,
   id,
-  labels,
   dispatch,
 }: TaskType & {
   dispatch: React.Dispatch<TodoAction>;
-  labels: StatusLabelsMap;
 }) {
   const [taskLabel, setTaskLabel] = useState<TaskStatus>(status);
+  const [confirmArchive, setConfirmArchive] = useState<boolean>(false);
+  const [pendingArchive, setPendingArchive] = useState<TaskStatus | undefined>(
+    undefined,
+  );
 
   const handleStatusChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const newStatus = e.target.value as TaskStatus;
-    setTaskLabel(newStatus);
+    if (newStatus === "ARCHIVED") {
+      setConfirmArchive(true);
+      setPendingArchive(newStatus);
+    } else {
+      setTaskLabel(newStatus);
+      dispatch({
+        type: "UPDATE_STATUS_TASK",
+        payload: {
+          id: id,
+          status: newStatus,
+        },
+      });
+    }
+  };
+
+  const handleArchiveConfirm = () => {
     dispatch({
       type: "UPDATE_STATUS_TASK",
       payload: {
         id: id,
-        status: newStatus,
+        status: "ARCHIVED",
       },
     });
+    setConfirmArchive(false);
+    setPendingArchive(undefined);
   };
+
+  const handleArchiveCancel = () => {
+    setConfirmArchive(false);
+    setPendingArchive(undefined);
+  };
+
+  const allowedStatuses = STATUS_TRANSITION[taskLabel];
 
   useEffect(() => {
     setTaskLabel(status);
   }, [status]);
 
   return (
-    <div>
+    <div className="flex flex-col border border-dashed border-amber-50  px-4 py-2">
       <h2>{title}</h2>
       <p>{description}</p>
-      <div>{labels[taskLabel]}</div>
-      <label htmlFor="task-status">
-        <select
-          className="bg-black text-amber-50"
-          id="task-status"
-          value={taskLabel}
-          onChange={handleStatusChange}
-        >
-          {Object.entries(labels).map(([key, label]) => (
-            <option key={key} value={key}>
-              {label}
-            </option>
-          ))}
-        </select>
-      </label>
+      <div>status: {STATUS_LABELS[taskLabel]}</div>
+      {status !== "ARCHIVED" && (
+        <label htmlFor="task-status">
+          move_to:
+          <select
+            className="bg-black text-amber-50 focus:outline-none"
+            id="task-status"
+            value={taskLabel}
+            onChange={handleStatusChange}
+          >
+            {allowedStatuses.map((allowedLabel) => (
+              <option
+                className="bg-transparent "
+                key={allowedLabel}
+                value={allowedLabel}
+              >
+                {STATUS_LABELS[allowedLabel]}
+              </option>
+            ))}
+          </select>
+        </label>
+      )}
+      {confirmArchive && (
+        <ConfirmModal
+          onClose={handleArchiveCancel}
+          onConfirm={handleArchiveConfirm}
+        />
+      )}
     </div>
   );
 }

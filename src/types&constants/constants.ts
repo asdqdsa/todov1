@@ -17,6 +17,14 @@ export const STATUS_LABELS: Record<TaskStatus, string> = {
   ARCHIVED: "Archived",
 };
 
+export const STATUS_TRANSITION: Record<TaskStatus, TaskStatus[]> = {
+  NEW: ["INPROCESS", "DONE", "BACKLOG", "ARCHIVED"],
+  INPROCESS: ["DONE", "BACKLOG", "ARCHIVED"],
+  DONE: ["ARCHIVED", "INPROCESS"],
+  BACKLOG: ["NEW", "INPROCESS"],
+  ARCHIVED: [],
+};
+
 export const dummyTask: TaskType = {
   id: "",
   title: "",

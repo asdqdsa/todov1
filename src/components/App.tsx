@@ -5,7 +5,7 @@ function App() {
   return (
     <TodoProvider>
       <div className="bg-black">
-        <div className="bg-black text-amber-50 w-screen h-screen container mx-auto">
+        <div className="font-mono bg-black text-amber-50 w-screen h-screen container mx-auto pt-4 selection:text-black selection:bg-amber-50">
           <Todo />
         </div>
       </div>

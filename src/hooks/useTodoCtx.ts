@@ -1,5 +1,9 @@
 import { createContext, useContext } from "react";
-import type { TaskStatus, TaskType, TodoAction } from "../types/todoTypes";
+import type {
+  TaskStatus,
+  TaskType,
+  TodoAction,
+} from "../types&constants/todoTypes";
 
 interface ITodoContext {
   state: {
