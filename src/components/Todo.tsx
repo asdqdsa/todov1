@@ -68,7 +68,9 @@ export function Todo() {
         />
       </div>
       {/* <pre>{JSON.stringify(findTaskById(selectTaskId || ""), null, 2)}</pre> */}
-      {selectedTask && <TaskInfo {...selectedTask} dispatch={dispatch} />}
+      {selectedTask && (
+        <TaskInfo key={selectedTask.id} {...selectedTask} dispatch={dispatch} />
+      )}
     </div>
   );
 }
